@@ -9,8 +9,11 @@ import (
 
 func main() {
 	var duration = utils.GetEnvWithDefaultDuration("DURATION", "100ms")
+	var i = 0
+
 	ticker := time.Tick(duration)
 	for t := range ticker {
-		fmt.Println("Tick: ", t)
+		i++
+		fmt.Println("Tick: ", i, " - ", t)
 	}
 }

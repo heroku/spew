@@ -3,7 +3,6 @@ package main
 import (
 	"time"
 	"fmt"
-	"github.com/freeformz/shh/utils"
 )
 
 

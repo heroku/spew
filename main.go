@@ -8,12 +8,9 @@ import (
 
 
 func main() {
-	var duration = utils.GetEnvWithDefaultDuration("DURATION", "100ms")
 	var i = 0
-
-	ticker := time.Tick(duration)
-	for t := range ticker {
+	for {
 		i++
-		fmt.Println("Tick: ", i, " - ", t)
+		fmt.Println("Spew: ", i, " - ", time.Now())
 	}
 }

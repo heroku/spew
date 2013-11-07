@@ -1,15 +1,26 @@
 package main
 
 import (
+	"log"
+	"os"
 	"time"
-	"fmt"
 )
-
 
 func main() {
 	var i = 0
+	var duration time.Duration
+
+	duration, err := time.ParseDuration(os.Getenv("DURATION"))
+	if err != nil {
+		log.Println("Duration Parsing: ", err)
+		log.Println("Continueing w/o duration")
+	}
+
 	for {
 		i++
-		fmt.Println("Spew: ", i, " - ", time.Now())
+		if duration > 0 {
+			time.Sleep(duration)
+		}
+		log.Println("Spew: ", i)
 	}
 }

@@ -10,6 +10,8 @@ func main() {
 	var i = 0
 	var duration time.Duration
 
+	log.SetFlags(log.Ldate | log.Lmicroseconds)
+
 	duration, err := time.ParseDuration(os.Getenv("DURATION"))
 	if err != nil {
 		log.Println("Duration Parsing: ", err)

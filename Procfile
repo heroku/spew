@@ -1,1 +1,1 @@
-ticker: bin/tick
+spew: bin/spew

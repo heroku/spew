@@ -11,6 +11,16 @@ func main() {
 	var i = 0
 	var duration time.Duration
 	var sl *log.Logger
+	longString := "0123456789"
+
+	long := os.Getenv("LONG") != ""
+
+	if long {
+		for i := 0; i < 12; i++ {
+			longString = longString + "-" + longString
+		}
+		longString = longString + "END"
+	}
 
 	log.SetFlags(log.Ldate | log.Lmicroseconds)
 
@@ -33,7 +43,11 @@ func main() {
 		if duration > 0 {
 			time.Sleep(duration)
 		}
-		log.Println("Spew: ", i)
+		if long {
+			log.Println("Spew: ", i, len(longString), longString)
+		} else {
+			log.Println("Spew: ", i)
+		}
 		if sl != nil {
 			sl.Println("Syslog Spew: ", i)
 		}

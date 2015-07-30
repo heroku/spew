@@ -1,5 +1,11 @@
 {
-	"ImportPath": "github.com/freeformz/spew",
+	"ImportPath": "spew",
 	"GoVersion": "go1.4.2",
-	"Deps": []
+	"Deps": [
+		{
+			"ImportPath": "github.com/kelseyhightower/envconfig",
+			"Comment": "v1.0.0-22-g4e0792c",
+			"Rev": "4e0792c28c6af6d74af7bac93eedb34a29107010"
+		}
+	]
 }

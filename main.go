@@ -2,19 +2,19 @@ package main
 
 import (
 	"fmt"
+	"github.com/kelseyhightower/envconfig"
 	"log"
 	"math/rand"
-	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
-const (
-	defaultMsgSize = 32
-	defaultSeed    = 8675309
-	defaultRate    = 1 * time.Second
-)
+type Config struct {
+	MsgSize int    `envconfig:"MSGSIZE", default:32`
+	Seed    int64  `envconfig:"SEED", default:8675309`
+	Rate    string `envconfig:"RATE", default:"1s"`
+}
 
 var bytes = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+{}[]|\\;:'<>,./?")
 
@@ -33,44 +33,40 @@ func parseRate(rate string) (time.Duration, error) {
 	if len(bits) == 2 {
 		duration, err = time.ParseDuration(bits[1])
 		if err != nil {
-			return defaultRate, err
+			return 0, err
 		}
 		num, err = strconv.ParseInt(bits[0], 10, 32)
 		if err != nil {
-			return defaultRate, err
+			return 0, err
 		}
 	} else {
 		num = 1
 		duration, err = time.ParseDuration(rate)
 	}
 
-	return time.Duration(int64(duration) / num), nil
+	return time.Duration(int64(duration) / num), err
 }
 
 func main() {
 	var i = 0
 	var buf []byte
+	var config Config
 
-	// Repeatable payloads.
-	if seed, err := strconv.ParseInt(os.Getenv("SEED"), 10, 32); err == nil {
-		rand.Seed(seed)
-	} else {
-		rand.Seed(defaultSeed)
+	err := envconfig.Process("spew", &config)
+	if err != nil {
+		log.Fatalf("Environment config error: %v", err)
 	}
 
-	sleepTime, err := parseRate(os.Getenv("RATE"))
+	// Repeatable payloads.
+	rand.Seed(config.Seed)
+
+	sleepTime, err := parseRate(config.Rate)
 	if err != nil {
 		log.Println("Duration Parsing: ", err)
 		log.Println("Continuing w/o duration")
 	}
 
-	mlen, err := strconv.ParseInt(os.Getenv("MSGSIZE"), 10, 32)
-	if err == nil && mlen > 0 {
-		buf = make([]byte, mlen)
-	} else {
-		log.Println("Unable to parse MSGSIZE, defaulting to MSGSIZE of", defaultMsgSize)
-		buf = make([]byte, defaultMsgSize)
-	}
+	buf = make([]byte, config.MsgSize)
 
 	for {
 		i++

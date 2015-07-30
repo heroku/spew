@@ -5,17 +5,23 @@ import (
 	"log"
 )
 
+// Note: the `default` tag must appear before `envconfig` for the default thing
+// to work.
 type Config struct {
-	MsgSize int    `envconfig:"MSGSIZE", default:32`
-	Seed    int64  `envconfig:"SEED", default:8675309`
-	Rate    string `envconfig:"RATE", default:"1s"`
+	MsgSize       int    `default:"32",envconfig:"MSGSIZE"`
+	Seed          int64  `default:"8675309",envconfig:"SEED"`
+	Rate          string `default:"1s",envconfig:"RATE"`
+	LibratoUser   string `envconfig:"LIBRATO_USER"`
+	LibratoPass   string `envconfig:"LIBRATO_PASS"`
+	LibratoSource string `envconfig:"LIBRATO_SOURCE"`
 }
 
-func GetConfig() *Config {
-	config := new(Config)
-	err := envconfig.Process("spew", config)
+var config Config
+
+func init() {
+	err := envconfig.Process("spew", &config)
 	if err != nil {
 		log.Fatalf("Incomplete config: %v", err)
 	}
-	return config
+	log.Printf("Config => %+v", config)
 }

@@ -2,19 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/kelseyhightower/envconfig"
 	"log"
 	"math/rand"
 	"strconv"
 	"strings"
 	"time"
 )
-
-type Config struct {
-	MsgSize int    `envconfig:"MSGSIZE", default:32`
-	Seed    int64  `envconfig:"SEED", default:8675309`
-	Rate    string `envconfig:"RATE", default:"1s"`
-}
 
 var bytes = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+{}[]|\\;:'<>,./?")
 
@@ -50,12 +43,8 @@ func parseRate(rate string) (time.Duration, error) {
 func main() {
 	var i = 0
 	var buf []byte
-	var config Config
 
-	err := envconfig.Process("spew", &config)
-	if err != nil {
-		log.Fatalf("Environment config error: %v", err)
-	}
+	config := GetConfig()
 
 	// Repeatable payloads.
 	rand.Seed(config.Seed)

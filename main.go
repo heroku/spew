@@ -62,8 +62,7 @@ func main() {
 
 	sleepTime, err := parseRate(config.Rate)
 	if err != nil {
-		log.Println("Duration Parsing: ", err)
-		log.Println("Continuing w/o duration")
+		log.Fatalf("Invalid value for DURATION: %v", err)
 	}
 
 	buf = make([]byte, config.MsgSize)

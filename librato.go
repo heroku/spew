@@ -38,14 +38,15 @@ func (evt *AnnotationEvent) Send() error {
 	if err != nil {
 		return err
 	}
-	return APIRequest("/annotation/"+evt.Name, data)
+	return APIRequest("/annotations/"+evt.Name, data)
 }
 
 func Annotate(name, title, description string, start, end time.Time) error {
 	evt := AnnotationEvent{
+		Name:        name,
 		Title:       title,
 		Source:      config.LibratoSource,
-		Description: "generic spew generated metrics",
+		Description: description,
 		StartTime:   start.Unix(),
 		EndTime:     end.Unix(),
 	}

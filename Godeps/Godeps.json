@@ -1,6 +1,9 @@
 {
-	"ImportPath": "spew",
+	"ImportPath": "github.com/heroku/spew",
 	"GoVersion": "go1.4.2",
+	"Packages": [
+		"./..."
+	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/kelseyhightower/envconfig",

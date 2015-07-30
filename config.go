@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/kelseyhightower/envconfig"
+	"github.com/heroku/spew/Godeps/_workspace/src/github.com/kelseyhightower/envconfig"
 	"log"
 )
 

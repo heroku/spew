@@ -50,8 +50,8 @@ func main() {
 	var i = 0
 	var buf []byte
 	startTime := time.Now()
-	description := fmt.Sprintf("Spew run with msg size = %v, rate = %v and seed = %v",
-		config.MsgSize, config.Rate, config.Seed)
+	description := fmt.Sprintf("Spew run with msg size = %d\nrate = %s\nseed = %d\nsource = %q",
+		config.MsgSize, config.Rate, config.Seed, config.LibratoSource)
 
 	// Signal handling
 	c := make(chan os.Signal, 1)
@@ -61,8 +61,7 @@ func main() {
 			// sig is a ^C, handle it
 			log.Printf("Received interrupt; sending annotation to librato...")
 			endTime := time.Now()
-			err := Annotate("spew-run", "Spew Run", description,
-				startTime, endTime)
+			err := Annotate("spew-run", "Spew Run", description, startTime, endTime)
 			if err != nil {
 				log.Printf("ERROR sending to librato: %v", err)
 				os.Exit(1)

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -e
+
+# The app name you want to release the slug to
+APP=$1
+SLUG=${SLUG:-./tmp/slug.tgz}
+
+test -f "$SLUG" || ./bin/compile $(dirname $SLUG)
+
+out=$(curl -s -k -X POST \
+	-H 'Content-Type: application/json' \
+	-H 'Accept: application/vnd.heroku+json; version=3' \
+	-d '{"process_types":{"spew":"bin/spew"}}' \
+	-n $HEROKU_API_URL/apps/$APP/slugs)
+
+id=$(echo "$out" | jq '.id' | sed 's/"//g')
+url=$(echo "$out" | jq '.blob | .url' | sed 's/"//g')
+
+echo "-----> Created Slug: $id"
+
+printf "       Uploading slug..."
+out=$(curl -s -X PUT \
+	-H "Content-Type:" \
+	 --data-binary @$SLUG \
+	 "$url")
+
+echo " done"
+
+out=$(curl -s -k -X POST \
+	-H "Accept: application/vnd.heroku+json; version=3" \
+	-H "Content-Type: application/json" \
+	-d "{\"slug\":\"$id\"}" \
+	-n $HEROKU_API_URL/apps/$APP/releases)
+
+version=$(echo "$out" | jq '.version')
+
+echo "-----> Released version: $version"

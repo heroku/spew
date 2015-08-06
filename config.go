@@ -23,5 +23,5 @@ func init() {
 	if err != nil {
 		log.Fatalf("Incomplete config: %v", err)
 	}
-	log.Printf("Config => %+v", config)
+	// log.Printf("Config => %+v", config)
 }

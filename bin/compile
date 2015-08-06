@@ -1,0 +1,12 @@
+#!/bin/bash
+
+target=${1:-./tmp}
+mkdir -p $target
+
+docker build -t heroku/spew .
+container=$(docker run -d heroku/spew tar cfvz /tmp/slug.tgz -C / --exclude=.git ./app)
+docker wait $container >/dev/null
+docker cp $container:/tmp/slug.tgz $target
+docker rm $container >/dev/null
+
+echo "-----> Done: Slug copied to $(ls $target)"

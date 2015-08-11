@@ -8,9 +8,9 @@ import (
 // Note: the `default` tag must appear before `envconfig` for the default thing
 // to work.
 type Config struct {
-	MsgSize       int    `default:"32",envconfig:"MSGSIZE"`
-	Seed          int64  `default:"8675309",envconfig:"SEED"`
-	Rate          string `default:"1s",envconfig:"RATE"`
+	MsgSize       int    `default:"32" envconfig:"MSGSIZE"`
+	Seed          int64  `default:"8675309" envconfig:"SEED"`
+	Rate          string `default:"1s" envconfig:"RATE"`
 	LibratoUser   string `envconfig:"LIBRATO_USER"`
 	LibratoPass   string `envconfig:"LIBRATO_PASS"`
 	LibratoSource string `envconfig:"LIBRATO_SOURCE"`

@@ -24,14 +24,14 @@ func randStr(buf []byte) string {
 func parseRate(rate string) (time.Duration, error) {
 	var duration time.Duration
 	var err error
-	num := int64(1)
+	num := float64(1)
 	bits := strings.Split(rate, "/")
 	if len(bits) == 2 {
 		duration, err = time.ParseDuration(bits[1])
 		if err != nil {
 			return 0, err
 		}
-		num, err = strconv.ParseInt(bits[0], 10, 32)
+		num, err = strconv.ParseFloat(bits[0], 32)
 		if err != nil {
 			return 0, err
 		}
@@ -43,7 +43,7 @@ func parseRate(rate string) (time.Duration, error) {
 		}
 	}
 
-	return time.Duration(int64(duration) / num), err
+	return time.Duration(float64(duration) / float64(num)), err
 }
 
 func main() {

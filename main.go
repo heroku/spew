@@ -59,15 +59,17 @@ func main() {
 	go func() {
 		for _ = range c {
 			// sig is a ^C, handle it
-			log.Printf("Received interrupt; sending annotation to librato...")
-			endTime := time.Now()
-			err := Annotate("spew-run", "Spew Run", description, startTime, endTime)
-			if err != nil {
-				log.Printf("ERROR sending to librato: %v", err)
-				os.Exit(1)
-			} else {
-				log.Printf("Done sending to librato.")
-				os.Exit(0)
+			if config.LibratoUser != "" {
+				log.Printf("Received interrupt; sending annotation to librato...")
+				endTime := time.Now()
+				err := Annotate("spew-run", "Spew Run", description, startTime, endTime)
+				if err != nil {
+					log.Printf("ERROR sending to librato: %v", err)
+					os.Exit(1)
+				} else {
+					log.Printf("Done sending to librato.")
+					os.Exit(0)
+				}
 			}
 		}
 	}()

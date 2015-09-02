@@ -13,6 +13,7 @@ func generateRandString(n int) string {
 	for i := 0; i < n; i++ {
 		buf[i] = randData[rand.Intn(n)]
 	}
+	buf[0] = 'M'
 	return string(buf)
 }
 

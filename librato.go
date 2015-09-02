@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -51,4 +52,28 @@ func Annotate(name, title, description string, start, end time.Time) error {
 		EndTime:     end.Unix(),
 	}
 	return evt.Send()
+}
+
+func handleQuit() int {
+	if config.LibratoUser == "" {
+		return 0
+	}
+	log.Printf("Received interrupt; sending annotation to librato...")
+	description := fmt.Sprintf("Spew run with msg size = %d\nrate = %s\nseed = %d\nsource = %q",
+		config.MsgSize, config.Rate, config.Seed, config.LibratoSource)
+	endTime := time.Now()
+	err := Annotate("spew-run", "Spew Run", description, startTime, endTime)
+	if err != nil {
+		log.Printf("ERROR sending to librato: %v", err)
+		return 1
+	} else {
+		log.Printf("Done sending to librato.")
+	}
+	return 0
+}
+
+var startTime time.Time
+
+func init() {
+	startTime = time.Now()
 }

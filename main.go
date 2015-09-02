@@ -9,7 +9,7 @@ func main() {
 
 	msg := NewMsg(config.MsgSize)
 	for {
-		num := config.traffic.Next()
-		fmt.Println(num, "spews", msg.Generate())
+		num, msgPrefix := config.traffic.Next()
+		fmt.Println(num, "spews", msgPrefix+msg.Generate())
 	}
 }

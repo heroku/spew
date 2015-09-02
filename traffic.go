@@ -43,7 +43,7 @@ func NewTraffic(rate string, spikeSpec string) (*Traffic, error) {
 	return &traffic, nil
 }
 
-func (t *Traffic) Next() (int, string) {
+func (t *Traffic) Next() (int, []string) {
 	t.counter += 1
 
 	if t.spike.enabled {
@@ -67,12 +67,11 @@ func (t *Traffic) Next() (int, string) {
 
 	if t.spike.enabled && t.spike.index > 0 {
 		msgPrefix := fmt.Sprintf("spike#%d=%d/%d ", t.spike.counter, t.spike.index, t.spike.length)
-		return t.counter, msgPrefix
+		return t.counter, []string{msgPrefix}
 	} else {
 		time.Sleep(t.normalSleep)
+		return t.counter, nil
 	}
-
-	return t.counter, ""
 }
 
 // parseRate converts a rate string like "100/1s" to "10ms" duration value

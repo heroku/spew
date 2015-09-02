@@ -2,15 +2,14 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
 
 func main() {
 	runOnQuit(handleQuit)
 
 	msg := NewMsg(config.MsgSize)
-	for num := 1; ; num++ {
-		time.Sleep(config.sleepTime)
-		fmt.Println(num, "spews", msg.Generate())
+	for {
+		num, metrics := config.traffic.Next()
+		fmt.Println(num, "spews", msg.Generate(metrics...))
 	}
 }

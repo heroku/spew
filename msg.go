@@ -3,31 +3,40 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 )
 
 var randData = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+{}[]|\\;:'<>,./?")
 
+func generateRandString(n int) string {
+	buf := make([]byte, n)
+	for i := 0; i < n; i++ {
+		buf[i] = randData[rand.Intn(n)]
+	}
+	buf[0] = 'M'
+	return string(buf)
+}
+
 type Msg struct {
-	buf       []byte
-	prefixLen int
+	size    int
+	metrics []string
 }
 
 func NewMsg(size int) *Msg {
-	prefix := fmt.Sprintf("rate=%v ", config.Rate)
-	prefixLen := len(prefix)
-	if prefixLen > size {
-		prefixLen = size
+	msg := Msg{
+		size,
+		[]string{fmt.Sprintf("rate=%v", config.Rate)},
 	}
-
-	msg := Msg{make([]byte, size), prefixLen}
-	copy(msg.buf, prefix)
 
 	return &msg
 }
 
-func (msg *Msg) Generate() string {
-	for i := msg.prefixLen; i < len(msg.buf); i++ {
-		msg.buf[i] = randData[rand.Intn(len(randData))]
+func (msg *Msg) Generate(extraMetrics ...string) string {
+	metrics := append(msg.metrics, extraMetrics...)
+	prefix := strings.Join(metrics, " ") + " "
+	if len(prefix) > msg.size {
+		return prefix[:msg.size]
+	} else {
+		return prefix + generateRandString(msg.size-len(prefix))
 	}
-	return string(msg.buf)
 }

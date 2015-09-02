@@ -68,9 +68,10 @@ func main() {
 					os.Exit(1)
 				} else {
 					log.Printf("Done sending to librato.")
-					os.Exit(0)
 				}
 			}
+			// Exit no matter what
+			os.Exit(0)
 		}
 	}()
 

@@ -11,7 +11,7 @@ var randData = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234
 func generateRandString(n int) string {
 	buf := make([]byte, n)
 	for i := 0; i < n; i++ {
-		buf[i] = randData[rand.Intn(n)]
+		buf[i] = randData[rand.Intn(len(randData))]
 	}
 	buf[0] = 'M'
 	return string(buf)
@@ -23,12 +23,10 @@ type Msg struct {
 }
 
 func NewMsg(size int) *Msg {
-	msg := Msg{
+	return &Msg{
 		size,
 		[]string{fmt.Sprintf("rate=%v", config.Rate)},
 	}
-
-	return &msg
 }
 
 func (msg *Msg) Generate(extraMetrics ...string) string {

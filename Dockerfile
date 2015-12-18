@@ -1,6 +1,7 @@
-FROM scratch
+FROM alpine:latest
 MAINTAINER Telemetry Team <telemetry@heroku.com>
 
-COPY dist/spew /app/spew
+WORKDIR /
+COPY dist/spew /spew
 
-CMD ["/app/spew"]
+CMD ["/spew"]
